@@ -1,0 +1,232 @@
+/* ---------- Responsive, accessible CSS for weather.html ---------- */
+/* Paste this whole block into your <style> (replace existing styles) */
+
+:root{
+  --bg-day-1: #87CEEB;
+  --bg-day-2: #E0F6FF;
+  --bg-night-1: #1A2A44;
+  --bg-night-2: #2E4066;
+  --card-bg: rgba(255,255,255,0.92);
+  --card-bg-dark: rgba(255,255,255,0.06);
+  --accent: #ff7e5f;
+  --accent-2: #feb47b;
+  --muted: #555;
+  --text-light: #ffffff;
+  --radius: 12px;
+  --pad: 12px;
+  --max-width: 1100px;
+  --shadow: 0 8px 20px rgba(2,6,23,0.12);
+  box-sizing: border-box;
+}
+
+/* reset & sensible defaults */
+*,
+*::before,
+*::after { box-sizing: inherit; }
+html,body { height:100%; margin:0; padding:0; }
+body {
+  box-sizing: border-box;
+  font-family: Inter, "Arial", sans-serif;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  min-height:100vh;
+  padding:20px;
+  transition: background 600ms ease, color 300ms ease;
+  color: #222;
+  background: linear-gradient(to bottom, var(--bg-day-1), var(--bg-day-2));
+}
+
+/* background utility classes (keeps names from your HTML) */
+.day.clear   { background: linear-gradient(to bottom, #87CEEB, #FFFACD); }
+.day.clouds  { background: linear-gradient(to bottom, #B0C4DE, #E6E6FA); }
+.day.rain    { background: linear-gradient(to bottom, #A0B3C2, #D6E2EA); }
+.day.snow    { background: linear-gradient(to bottom, #F0F8FF, #E6E6FA); }
+.night.clear { background: linear-gradient(to bottom, #16233a, #223450); color:var(--text-light); }
+.night.clouds{ background: linear-gradient(to bottom, #1a2538, #2b3b56); color:var(--text-light); }
+.night.rain  { background: linear-gradient(to bottom, #0f1b2a, #223044); color:var(--text-light); }
+.night.snow  { background: linear-gradient(to bottom, #1e2a3c, #2b3b56); color:var(--text-light); }
+
+/* container that centers content and constrains width */
+.main-wrap {
+  width:100%;
+  max-width:var(--max-width);
+  margin:0 auto;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+}
+
+/* header */
+h1 {
+  margin:0;
+  font-size:20px;
+  line-height:1.05;
+  color:var(--text-light);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  background: linear-gradient(90deg, rgba(0,0,0,0.05), rgba(255,255,255,0.04));
+  padding:8px 14px;
+  border-radius:10px;
+}
+
+/* controls layout (select, input, button) */
+.controls {
+  width:100%;
+  max-width:760px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:center;
+  flex-wrap:wrap;
+  margin-top:6px;
+}
+
+.controls select,
+.controls input {
+  -webkit-appearance:none;
+  appearance:none;
+  border:1px solid rgba(0,0,0,0.06);
+  padding:10px 12px;
+  font-size:15px;
+  border-radius:10px;
+  background:#fff;
+  min-width:160px;
+  flex: 1 1 160px;
+  outline:none;
+}
+
+.controls button {
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  color: #fff;
+  border: none;
+  padding:10px 16px;
+  font-weight:600;
+  cursor:pointer;
+  border-radius:10px;
+  min-width:140px;
+  flex: 0 0 auto;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms;
+}
+
+.controls button:active { transform: translateY(1px) scale(.995); }
+.controls button:hover { box-shadow: 0 12px 26px rgba(0,0,0,0.14); }
+
+/* small helpers */
+#loading { display:inline-flex; align-items:center; gap:8px; color:var(--text-light); }
+#loading::after {
+  content: '';
+  width:14px;
+  height:14px;
+  border:2px solid rgba(255,255,255,0.6);
+  border-top-color: #fff;
+  border-radius:50%;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin { to { transform: rotate(1turn); } }
+
+/* error box */
+#error {
+  display:none;
+  width:100%;
+  max-width:760px;
+  background:rgba(255,80,80,0.12);
+  color:#8b0000;
+  padding:10px 12px;
+  border-radius:10px;
+  border:1px solid rgba(139,0,0,0.08);
+}
+
+/* weather container: responsive grid/flex mix */
+.weather-container {
+  width:100%;
+  max-width:var(--max-width);
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  justify-content:center;
+  align-items:flex-start;
+  margin-top:6px;
+  padding:6px;
+}
+
+/* card: grow/shrink nicely across widths */
+.weather-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding:12px;
+  min-width:140px;
+  max-width:260px;
+  width: calc(33.333% - 16px);
+  box-shadow: var(--shadow);
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:6px;
+  transition: transform 240ms ease, box-shadow 240ms ease;
+  color: #222;
+}
+
+/* hover effect */
+.weather-card:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(2,6,23,0.12); }
+
+/* responsive card sizing */
+.weather-card img { width:72px; height:auto; display:block; }
+.weather-card h4 { margin:6px 0 0 0; font-size:15px; font-weight:700; color: #222; }
+.weather-card p { margin:0; font-size:13px; color:var(--muted); }
+
+/* message / advice box */
+#message {
+  margin-top:12px;
+  padding:10px 14px;
+  border-radius:10px;
+  font-weight:600;
+  font-size:15px;
+  color:var(--text-light);
+  background: linear-gradient(90deg, rgba(0,0,0,0.18), rgba(0,0,0,0.12));
+  opacity:0;
+  transform: translateY(6px);
+  transition: opacity 420ms ease, transform 420ms ease;
+  text-align:center;
+  min-width:220px;
+}
+#message.show { opacity:1; transform: translateY(0); }
+
+/* small screens: stack layout */
+@media (max-width:900px) {
+  .weather-card { width: calc(50% - 12px); }
+  h1 { font-size:20px; padding:6px 10px; }
+}
+
+/* very small screens: single column */
+@media (max-width:420px) {
+  body { padding:12px; }
+  .controls { gap:8px; }
+  .weather-card { width: 100%; max-width: 100%; }
+  .controls select, .controls input { min-width:0; }
+  #message { font-size:14px; padding:10px; }
+}
+
+/* high-contrast / dark-preference adjustments */
+@media (prefers-color-scheme: dark) {
+  body { color:#eee; }
+  .weather-card { background: rgba(255,255,255,0.04); color:#eee; }
+  .controls select, .controls input { background: rgba(255,255,255,0.03); color:#eee; border:1px solid rgba(255,255,255,0.04); }
+  #error { background: rgba(255,80,80,0.06); color:#ffb3b3; border-color: rgba(255,80,80,0.06); }
+}
+
+/* accessibility: focus outlines */
+.controls select:focus,
+.controls input:focus,
+.controls button:focus {
+  outline: 3px solid rgba(255,126,95,0.18);
+  outline-offset:2px;
+  box-shadow: 0 6px 18px rgba(255,126,95,0.08);
+}
+
+/* small utility */
+.small { font-size:12px; color:var(--muted); }
