@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Өнөөдрийн цагийн цаг агаар</title>
+  <title>Өнөөдрийн цаг агаар — ОДОО</title>
 
   <!-- ✅ Leaflet CSS -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
@@ -34,176 +34,77 @@
       background: linear-gradient(135deg, var(--cloudy-1), var(--cloudy-2));
     }
 
-    .day.clear {
-      background: linear-gradient(135deg, var(--sunny-1), var(--sunny-2));
-    }
-    .day.clouds {
-      background: linear-gradient(135deg, var(--cloudy-1), var(--cloudy-2));
-    }
-    .day.rain {
-      background: linear-gradient(135deg, var(--rain-1), var(--rain-2));
-    }
+    .day.clear { background: linear-gradient(135deg, var(--sunny-1), var(--sunny-2)); }
+    .day.clouds { background: linear-gradient(135deg, var(--cloudy-1), var(--cloudy-2)); }
+    .day.rain { background: linear-gradient(135deg, var(--rain-1), var(--rain-2)); }
+
     .night.clear, .night.clouds, .night.rain {
       background: linear-gradient(135deg, var(--night-1), var(--night-2));
       position: relative;
     }
     .night.clear::before, .night.clouds::before, .night.rain::before {
       content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      position: absolute; inset: 0;
       background: url('https://www.transparenttextures.com/patterns/stardust.png') repeat;
-      opacity: 0.5;
-      z-index: 1;
+      opacity: 0.5; z-index: 1;
     }
-    .night * {
-      position: relative;
-      z-index: 2;
-    }
+    .night * { position: relative; z-index: 2; }
 
     h1 {
-      margin-top: 30px;
-      text-align: center;
-      font-size: 28px;
-      font-weight: 700;
+      margin-top: 30px; text-align: center; font-size: 28px; font-weight: 700;
       text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
     }
 
     .controls {
-      margin-top: 20px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
+      margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
     }
 
     select, input, button {
-      padding: 10px 15px;
-      border-radius: var(--radius);
-      border: none;
-      outline: none;
-      font-size: 15px;
+      padding: 10px 15px; border-radius: var(--radius); border: none; outline: none; font-size: 15px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
 
-    select, input {
-      color: #333;
-      background: #fff;
-      min-width: 160px;
-    }
+    select, input { color: #333; background: #fff; min-width: 160px; }
 
     button {
-      background: linear-gradient(135deg, #43cea2, #185a9d);
-      color: #dfd4d4;
-      cursor: pointer;
-      font-weight: 600;
+      background: linear-gradient(135deg, #43cea2, #185a9d); color: #dfd4d4; cursor: pointer; font-weight: 600;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
+    button:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
 
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
-    }
+    #error { margin-top: 10px; background: rgba(255, 0, 0, 0.2); color: #fff; padding: 10px 20px; border-radius: var(--radius); display: none; }
+    #loading { margin-top: 10px; font-weight: 500; }
 
-    #error {
-      margin-top: 10px;
-      background: rgba(255, 0, 0, 0.2);
-      color: #fff;
-      padding: 10px 20px;
-      border-radius: var(--radius);
-      display: none;
-    }
-
-    #loading {
-      margin-top: 10px;
-      font-weight: 500;
-    }
-
-    .weather-container {
-      margin-top: 40px;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 15px;
-      padding: 10px;
-    }
+    .weather-container { margin-top: 40px; display: grid; grid-template-columns: repeat(auto-fit,minmax(220px,1fr)); gap: 15px; padding: 10px; width: 90%; }
 
     .weather-card {
-      background: rgba(255,255,255,0.15);
-      border-radius: var(--radius);
-      padding: 15px;
-      text-align: center;
-      width: 160px;
-      backdrop-filter: blur(8px);
-      box-shadow: 0 6px 16px rgba(7, 4, 4, 0.25);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      background: rgba(255,255,255,0.15); border-radius: var(--radius); padding: 18px; text-align: center; backdrop-filter: blur(8px);
+      box-shadow: 0 6px 16px rgba(7, 4, 4, 0.25); transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
+    .weather-card:hover { transform: translateY(-6px); box-shadow: 0 10px 20px rgba(0,0,0,0.35); }
+    .weather-card img { width: 80px; height: auto; }
+    .weather-card h4 { margin: 10px 0 5px; font-size: 18px; font-weight: 700; color: #fff; }
+    .weather-card p { margin: 6px 0; font-size: 14px; color: #eee; }
 
-    .weather-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 10px 20px rgba(0,0,0,0.35);
-    }
+    #message { margin-top: 20px; padding: 10px 20px; border-radius: var(--radius); font-size: 15px; font-weight: 600; background: rgba(31, 47, 93, 0.2); backdrop-filter: blur(6px); opacity: 0; transform: translateY(10px); transition: all 0.6s ease; }
+    #message.show { opacity: 1; transform: translateY(0); }
 
-    .weather-card img {
-      width: 70px;
-      height: auto;
-    }
-
-    .weather-card h4 {
-      margin: 10px 0 5px;
-      font-size: 16px;
-      font-weight: 700;
-      color: #fff;
-    }
-
-    .weather-card p {
-      margin: 8px 0;
-      font-size: 14px;
-      color: #eee;
-    }
-
-    #message {
-      margin-top: 25px;
-      padding: 10px 20px;
-      border-radius: var(--radius);
-      font-size: 15px;
-      font-weight: 600;
-      background: rgba(31, 47, 93, 0.2);
-      backdrop-filter: blur(6px);
-      opacity: 0;
-      transform: translateY(10px);
-      transition: all 0.6s ease;
-    }
-
-    #message.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    #map {
-      width: 90%;
-      height: 300px;
-      margin-top: 30px;
-      border-radius: var(--radius);
-      box-shadow: 0 5px 20px rgba(0,0,0,0.4);
-      z-index: 0;
-    }
+    #map { width: 90%; height: 320px; margin-top: 30px; border-radius: var(--radius); box-shadow: 0 5px 20px rgba(0,0,0,0.4); z-index: 0; }
   </style>
 </head>
 <body>
-  <h1>🌤️ Өнөөдрийн цагийн цаг агаар</h1>
+  <h1>🌤️ Өнөөдрийн цаг агаар — Одоогийн</h1>
 
   <div class="controls">
     <select id="citySelect">
-      <option value="Ulaanbaatar,mn">Монгол</option>
+      <option value="Ulaanbaatar,mn">Улаанбаатар</option>
+      <option value="Erdenet,mn">Эрдэнэт</option>
       <option value="Tokyo,jp">Токио</option>
       <option value="London,uk">Лондон</option>
       <option value="New York,us">Нью Йорк</option>
       <option value="Paris,fr">Парис</option>
     </select>
-    <input id="cityInput" type="text" placeholder="Хот оруулах (жишээ: Erdenet,mn)">
+    <input id="cityInput" type="text" placeholder="Хот оруулах (жишээ: Darkhan,mn)">
     <button id="fetchBtn">Мэдээлэл авах</button>
   </div>
 
@@ -222,7 +123,9 @@
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
   <script>
-    const apiKey = 'f6f84ebdae74fb2148fc8ed524056541'; // 🔑 өөрийн OpenWeatherMap API түлхүүрээ энд оруул
+    // 🔑 Өөрийн OpenWeatherMap API түлхүүрээ энд оруул
+    const apiKey = 'f6f84ebdae74fb2148fc8ed524056541';
+
     const btn = document.getElementById('fetchBtn');
     const errorDiv = document.getElementById('error');
     const loadingDiv = document.getElementById('loading');
@@ -248,7 +151,8 @@
       weatherContainer.innerHTML = '';
       messageBox.classList.remove('show');
 
-      const url = `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric&lang=mn&cnt=40`;
+      // ⛅ ОДООГИЙН цаг агаарын endpoint
+      const url = `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${apiKey}&units=metric&lang=mn`;
 
       try {
         const res = await fetch(url);
@@ -257,10 +161,9 @@
           if (res.status === 404) throw new Error("Хот олдсонгүй");
           throw new Error("HTTP алдаа: " + res.status);
         }
-
         const data = await res.json();
         showWeather(data);
-        showMap(data.city.coord.lat, data.city.coord.lon, data.city.name);
+        showMap(data.coord.lat, data.coord.lon, data.name);
       } catch (err) {
         showError(err.message);
       } finally {
@@ -278,52 +181,59 @@
     }
 
     function showWeather(data) {
-      const current = data.list[0];
-      const weatherType = current.weather[0].main.toLowerCase();
-      const sunrise = data.city.sunrise * 1000;
-      const sunset = data.city.sunset * 1000;
-      const now = new Date().getTime();
+      const weatherType = (data.weather?.[0]?.main || '').toLowerCase();
+      const sunrise = (data.sys?.sunrise || 0) * 1000;
+      const sunset = (data.sys?.sunset || 0) * 1000;
+      const now = Date.now();
       const isDayTime = now >= sunrise && now <= sunset;
-      const timeClass = isDayTime ? "day" : "night";
-      const bgClass = `${timeClass} ${weatherType.includes("cloud") ? "clouds" : weatherType.includes("rain") ? "rain" : "clear"}`;
+      const timeClass = isDayTime ? 'day' : 'night';
+      const bgClass = `${timeClass} ${weatherType.includes('cloud') ? 'clouds' : weatherType.includes('rain') ? 'rain' : 'clear'}`;
       body.className = bgClass;
 
-      // ✅ 24 цагийн (3 цаг тутмын) мэдээлэл
-      weatherContainer.innerHTML = '';
-      data.list.slice(0, 8).forEach(item => {
-        const date = new Date(item.dt * 1000);
-        const time = date.toLocaleTimeString("mn-MN", { hour: "2-digit", minute: "2-digit" });
-        const icon = item.weather[0].icon;
-        const desc = item.weather[0].description;
-        const temp = item.main.temp.toFixed(1);
-        const wind = item.wind.speed.toFixed(1);
+      const icon = data.weather?.[0]?.icon || '01d';
+      const desc = data.weather?.[0]?.description || '';
+      const temp = (data.main?.temp ?? 0).toFixed(1);
+      const feels = (data.main?.feels_like ?? 0).toFixed(1);
+      const wind = (data.wind?.speed ?? 0).toFixed(1);
+      const humidity = data.main?.humidity ?? '-';
+      const pressure = data.main?.pressure ?? '-';
 
-        weatherContainer.innerHTML += `
-          <div class="weather-card">
-            <h4>${time}</h4>
-            <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="icon">
-            <p>${desc}</p>
-            <p>🌡️ Температур: ${temp}°C</p>
-            <p>💨 Салхи: ${wind} м/с</p>
-          </div>
-        `;
-      });
+      const localTime = new Date((data.dt || now) * 1000);
+      const timeStr = localTime.toLocaleString('mn-MN', { hour: '2-digit', minute: '2-digit' });
 
-      const temp = current.main.temp;
-      const msg = temp <= 0
-        ? "❄️ Гадаа хүйтэн байна шүү, дулаан хувцаслаарай!"
-        : temp < 15
-          ? "🌥 Гадаа сэрүүхэн байна, тохиромжтой хувцаслаарай."
-          : "☀️ Гадаа дулаахан байна, өдрийг сайхан өнгөрүүлээрэй!";
+      weatherContainer.innerHTML = `
+        <div class="weather-card">
+          <h4>${data.name} — ${timeStr}</h4>
+          <img src="https://openweathermap.org/img/wn/${icon}@4x.png" alt="icon">
+          <p style="font-size:20px; font-weight:700;">🌡️ ${temp}°C <span style="font-weight:500;">(мэдрэгдэх: ${feels}°C)</span></p>
+          <p>${desc}</p>
+          <p>💨 Салхи: ${wind} м/с</p>
+          <p>💧 Чийгшил: ${humidity}% • ⬇ Даралт: ${pressure} hPa</p>
+          <p>🌅 Нар: ${new Date(sunrise).toLocaleTimeString('mn-MN',{hour:'2-digit',minute:'2-digit'})}
+             • 🌇 Шингэх: ${new Date(sunset).toLocaleTimeString('mn-MN',{hour:'2-digit',minute:'2-digit'})}</p>
+        </div>
+      `;
+
+      const msg = Number(temp) <= 0
+        ? '❄️ Гадаа хүйтэн байна шүү, дулаан хувцаслаарай!'
+        : Number(temp) < 15
+          ? '🌥 Сэрүүхэн байна, тохиромжтой хувцаслаарай.'
+          : '☀️ Дулаахан байна, өдрийг сайхан өнгөрүүлээрэй!';
       messageBox.textContent = msg;
-      messageBox.classList.add("show");
+      messageBox.classList.add('show');
     }
 
     function showMap(lat, lon, city) {
-      map.setView([lat, lon], 8);
+      map.setView([lat, lon], 9);
       if (marker) marker.remove();
       marker = L.marker([lat, lon]).addTo(map).bindPopup(`📍 ${city}`).openPopup();
     }
+
+    // 👉 Анхдагч байдлаар Улаанбаатарын мэдээлэл татах (хүсвэл арилгаарай)
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('cityInput').value = '';
+      getWeather();
+    });
   </script>
 </body>
 </html>
